@@ -8,7 +8,7 @@ close all
 % N points   =>   N+2 signals
 N = 50
 
-% Basis functions
+%% Basis functions
 
 % ck[i] = cos(2*pi*k*i/N)
 % sk[i] = sin(2*pi*k*i/N)
@@ -32,7 +32,7 @@ t = linspace(0, i(end), 1000);
 
 toPlot = N <= 16;
 
-% Basis functions
+% Basis functions generator
 % ReX[]  basis functions
 matReXBasis = zeros(N/2+1, N);
 for k = 0:N/2
@@ -62,11 +62,21 @@ for k = 0:N/2
     end
 end
 
-%Signal to transform
+%% Signal to transform
+
+%Sine wave
 x = sin(2*pi*3*i/N);
 
+%Cosine wave
+x = sin(2*pi*10*i/N);
 
-%Signal transformation
+%unit impulse
+x = zeros(1, length(i)); x(1) = 1;
+
+% step
+x = ones(1, length(i));
+
+%% Signal transformation
 %Using dot product between x signal and basis functions the similarity
 %between them can be measured
 ReX = x*matReXBasis';
