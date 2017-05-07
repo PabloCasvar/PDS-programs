@@ -1,6 +1,6 @@
 %DFT
-%The input signal contains the signal being decomposed, while the two
-%signals (ImX[n] & ReX[n]) ontain the amplitudes of the comonent sine and
+%The input signal x[n] contains the signal being decomposed, while the two
+%signals (ImX[n] & ReX[n]) contain the amplitudes of the component sine and
 %cosine waves scaled
 clear all 
 close all
@@ -8,7 +8,7 @@ close all
 % N points   =>   N+2 signals
 N = 50
 
-%% Basis functions
+%%Basis functions
 
 % ck[i] = cos(2*pi*k*i/N)
 % sk[i] = sin(2*pi*k*i/N)
@@ -62,18 +62,17 @@ for k = 0:N/2
     end
 end
 
-%% Signal to transform
-
-%Sine wave
+%%Signal to transform
+%% Sine wave
 x = sin(2*pi*3*i/N);
 
-%Cosine wave
+%% Cosine wave
 x = sin(2*pi*10*i/N);
 
-%unit impulse
+%% unit impulse
 x = zeros(1, length(i)); x(1) = 1;
 
-% step
+%% step
 x = ones(1, length(i));
 
 %% Signal transformation
