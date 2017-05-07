@@ -6,7 +6,7 @@ clear all
 close all
 
 % N points   =>   N+2 signals
-N = 8
+N = 50
 
 % Basis functions
 
@@ -26,22 +26,100 @@ N = 8
 
 i = 0:N-1
 
+% t simulates "continous" time variable
 t = linspace(0, i(end), 1000);
 
-% ReX[]
+
+toPlot = N <= 16;
+
+% Basis functions
+% ReX[]  basis functions
+matReXBasis = zeros(N/2+1, N);
 for k = 0:N/2
-    y  = cos(2*pi*k*i/N)
-    yt = cos(2*pi*k*t/N)
-    figure
-    plot(i, y, 'b', t, yt, 'm');
-    ylim([-1 1])
+    y  = cos(2*pi*k*i/N);
+    yt = cos(2*pi*k*t/N);
+    
+    matReXBasis(k+1, :) = y;
+    
+    if toPlot
+        figure
+        plot(i, y, 'b', t, yt, 'm');
+        ylim([-1 1])
+    end
 end
 
-% ImX[]
+% ImX[] basis functions
+matImXBasis = zeros(N/2+1, N);
 for k = 0:N/2
-    y  = sin(2*pi*k*i/N)
-    yt = sin(2*pi*k*t/N)
-    figure 
-    plot(i, y, 'b', t, yt, 'm');
-    ylim([-1 1])
+    y  = sin(2*pi*k*i/N);
+    yt = sin(2*pi*k*t/N);
+    
+    matImXBasis(k+1, :) = y;
+    if toPlot
+        figure 
+        plot(i, y, 'b', t, yt, 'm');
+        ylim([-1 1])
+    end
 end
+
+%Signal to transform
+x = sin(2*pi*3*i/N);
+
+
+%Signal transformation
+%Using dot product between x signal and basis functions the similarity
+%between them can be measured
+ReX = x*matReXBasis';
+ImX = x*matImXBasis';
+
+maxV = max(max(ReX), max(ImX));
+minV = min(min(ReX), min(ImX));
+k = 0:N/2;
+
+figure 
+subplot(1, 2, 1)
+stem(k, ReX)
+ylim([minV, maxV])
+title('ReX');
+
+subplot(1, 2, 2)
+stem(k, ImX)
+ylim([minV, maxV])
+title('ImX');
+
+%Normalizing values for ReX and ImX
+normReX = (2/N)*ReX;
+normImX = (2/N)*ImX;
+
+%the spetial cases ReX[0] and Im[N/2] has to be normalized by (1/N)
+normReX(1)   = normReX(1)/2;
+normReX(N/2 + 1) = normReX(N/2 +1)/2;
+
+maxV = max(max(normReX), max(normImX));
+minV = min(min(normReX), min(normImX));
+k = 0:N/2;
+
+figure 
+subplot(1, 2, 1)
+stem(k, normReX)
+ylim([minV, maxV])
+title('normalize ReX');
+
+subplot(1, 2, 2)
+stem(k, normImX)
+ylim([minV, maxV])
+title('normalize ImX');
+
+% Changing to frequency representation
+
+MagX    = sqrt(ReX.^2 + ImX.^2);
+PhaseX  = atan(ImX./ReX);         %note: analize atan (arctan) properties
+
+figure 
+subplot(1, 2, 1)
+stem(k, MagX)
+title('MagX');
+
+subplot(1, 2, 2)
+stem(k, PhaseX)
+title('PhaseX');

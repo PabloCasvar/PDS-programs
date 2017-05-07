@@ -4,7 +4,7 @@ x = [0 1 2 3 4 5 6];
 %  y = conv(h,x)
 
 %  Y(z) = H(z)X(z)   =>    H(z) = Y(z)/X(z)    
-%  Sean A y B los coeficienes del sistema
+%  Let A and B be the coefficients of the system
 %  y = filter(A, B, x)
 
 %% Moving average filter
