@@ -33,7 +33,7 @@ x = sin(2*pi*1*t);
 x = cos(2*pi*1*t);
 
 
-%% Moving average filter
+%%Moving average filter
 % y[n] = a0 x[n] + a1 x[n-1] + ... + aN x[n-N]
 
 % Moving average filter by convolution
@@ -54,7 +54,7 @@ freqz(A,B);
 
 yAverage = y;
 
-%% First difference
+%%First difference
 % The discrete operation that mimics the forst derivative is called first
 % difference
 
@@ -72,7 +72,7 @@ figure
 freqz(A, B);
 yDiff = y;
 
-%% Running sum
+%%Running sum
 %The discrete operation that mimics the integral is called running sum
 
 %running sum by convolution
@@ -89,7 +89,7 @@ figure
 freqz(A,B);
 ySum = y;
 
-%% PLOT
+%%PLOT
 limS = max([max(x), max(yAverage), max(yDiff), max(ySum)]);
 limI = min([min(x), min(yAverage), min(yDiff), min(ySum)]);
 lims = [limI, limS];

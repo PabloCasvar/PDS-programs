@@ -31,4 +31,21 @@ public class Operation {
         }
         return sum;
     }
+
+
+    public static Double[] sin(Double[] array){
+        Double[] arraySin = new Double[array.length];
+        for(int i=0; i<array.length; i++){
+            arraySin[i] = Math.sin(array[i]);
+        }
+        return arraySin;
+    }
+
+    public static Double[] cos(Double[] array){
+        Double[] arrayCos = new Double[array.length];
+        for(int i=0; i<array.length; i++){
+            arrayCos[i] = Math.cos(array[i]);
+        }
+        return arrayCos;
+    }
 }
