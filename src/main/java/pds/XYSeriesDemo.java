@@ -34,6 +34,21 @@ public class XYSeriesDemo extends ApplicationFrame {
         series.add(21.9, null);
         series.add(25.6, 734.4);
         series.add(30.0, 453.2);
+        // create a basis function
+        Vectors vector = Vectors.linspace(0.0, 2 * Math.PI, 100);
+
+        Vectors cosVector = Vectors.cos(vector);
+        Printer.vector(cosVector);
+
+        Vectors sinVector = Vectors.sin(vector);
+        Printer.vector(sinVector);
+
+        XYSeries serie = new XYSeries("Seno");
+        Double[] x = vector.toArray();
+        Double[] sinArray = sinVector.toArray();
+        for (int i = 0; i < x.length; i++) {
+            serie.add(x[i], sinArray[i]);
+        }
         final XYSeriesCollection data = new XYSeriesCollection(series);
         final JFreeChart chart = ChartFactory.createXYLineChart(
                 "XY Series Demo",

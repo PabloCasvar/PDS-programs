@@ -6,13 +6,15 @@ package pds;
 public class Vectors{
     //Vector entries
     private Double[] entries;
+    public int length;
 
     public Vectors(Double[] entries){
         this.entries = new Double[entries.length];
         for(int i=0; i<entries.length; i++){
             this.entries[i] = entries[i];
-
         }
+
+        this.length = this.entries.length;
     }
 
     public Vectors scalarMult(Double scalar){
@@ -49,6 +51,28 @@ public class Vectors{
         }
         return sum;
     }
+
+    public static Vectors linspace(Double start, Double end, int points){
+        return new Vectors(Generator.linspace(start, end, points));
+    }
+
+    public static Vectors sin(Double[] array){
+        return new Vectors(Operation.sin(array));
+    }
+
+    public static Vectors sin(Vectors vectors){
+        return new Vectors(Operation.sin(vectors.toArray()));
+    }
+
+    public static Vectors cos(Double[] array){
+        return new Vectors(Operation.cos(array));
+    }
+
+    public static Vectors cos(Vectors vectors){
+        return new Vectors(Operation.cos(vectors.toArray()));
+    }
+
+
 
     public Double[] toArray(){
         return this.entries;
