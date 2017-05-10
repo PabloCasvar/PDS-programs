@@ -6,7 +6,7 @@ clear all
 close all
 
 % N points   =>   N+2 signals
-N = 50
+N = 10
 
 %%Basis functions
 
@@ -120,7 +120,6 @@ ylim([minV, maxV])
 title('normalize ImX');
 
 % Changing to frequency representation
-
 MagX    = sqrt(ReX.^2 + ImX.^2);
 PhaseX  = atan(ImX./ReX);         %note: analize atan (arctan) properties
 
@@ -132,3 +131,13 @@ title('MagX');
 subplot(1, 2, 2)
 stem(k, PhaseX)
 title('PhaseX');
+
+%% Returning to time domain
+
+%normalize ReX[] and ImX are transposed and replicated in order to perforn
+%elemnt weise multiplications by the basis functions, theen aummation is
+%performed
+figure
+plot(sum(repmat(normReX', 1, N).*matReXBasis))
+figure
+plot(sum(repmat(normImX', 1, N).*matImXBasis))
