@@ -6,7 +6,7 @@ clear all
 close all
 
 % N points   =>   N+2 signals
-N = 10
+N = 30
 
 %%Basis functions
 
@@ -64,16 +64,19 @@ end
 
 %%Signal to transform
 %% Sine wave
-x = sin(2*pi*3*i/N);
+x = sin(2*pi*3.8*i/N);
 
 %% Cosine wave
-x = sin(2*pi*10*i/N);
+x = cos(2*pi*10*i/N);
 
 %% unit impulse
 x = zeros(1, length(i)); x(1) = 1;
 
 %% step
 x = ones(1, length(i));
+
+%% Mixed signal
+x = 1 + sin(2*pi*3.8*i/N) + cos(2*pi*10*i/N);
 
 %% Signal transformation
 %Using dot product between x signal and basis functions the similarity
@@ -137,7 +140,9 @@ title('PhaseX');
 %normalize ReX[] and ImX are transposed and replicated in order to perforn
 %elemnt weise multiplications by the basis functions, theen aummation is
 %performed
+cosContrib = sum(repmat(normReX', 1, N).*matReXBasis);
+sinContrib = sum(repmat(normImX', 1, N).*matImXBasis);
+
+xSynth = cosContrib + sinContrib;
 figure
-plot(sum(repmat(normReX', 1, N).*matReXBasis))
-figure
-plot(sum(repmat(normImX', 1, N).*matImXBasis))
+plot(i, x, 'b', i, xSynth, 'm');
