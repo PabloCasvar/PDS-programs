@@ -64,7 +64,7 @@ end
 
 %%Signal to transform
 %% Sine wave
-x = sin(2*pi*3.8*i/N);
+x = sin(2*pi*5*i/N + pi);
 
 %% Cosine wave
 x = cos(2*pi*10*i/N);
@@ -123,8 +123,23 @@ ylim([minV, maxV])
 title('normalize ImX');
 
 % Changing to frequency representation
-MagX    = sqrt(ReX.^2 + ImX.^2);
-PhaseX  = atan(ImX./ReX);         %note: analize atan (arctan) properties
+MagX    = sqrt(normReX.^2 + normImX.^2);
+
+limit = 1e-10;
+filteredReX = normReX .* (abs(normReX) > limit);
+filteredImX = normImX .* (abs(normImX) > limit);
+for cont = 1:N/2+1
+    if(~filteredReX(cont))
+        if(normImX < 0)
+            argument = -inf;
+        else
+            argument = inf;
+        end
+    else
+        argument = filteredImX(cont)/filteredReX(cont);
+    end
+    PhaseX(cont)  = atan(argument);         %note: analize atan (arctan) properties
+end
 
 figure 
 subplot(1, 2, 1)
