@@ -6,7 +6,7 @@ clear all
 close all
 
 % N points   =>   N+2 signals
-N = 50
+N = 30
 
 %%Basis functions
 
@@ -64,16 +64,19 @@ end
 
 %%Signal to transform
 %% Sine wave
-x = sin(2*pi*3*i/N);
+x = sin(2*pi*5*i/N - pi);
 
 %% Cosine wave
-x = sin(2*pi*10*i/N);
+x = cos(2*pi*10*i/N - pi);
 
 %% unit impulse
 x = zeros(1, length(i)); x(1) = 1;
 
 %% step
 x = ones(1, length(i));
+
+%% Mixed signal
+x = 1 + sin(2*pi*3.8*i/N) + cos(2*pi*10*i/N);
 
 %% Signal transformation
 %Using dot product between x signal and basis functions the similarity
@@ -120,9 +123,23 @@ ylim([minV, maxV])
 title('normalize ImX');
 
 % Changing to frequency representation
+MagX    = sqrt(normReX.^2 + normImX.^2);
 
-MagX    = sqrt(ReX.^2 + ImX.^2);
-PhaseX  = atan(ImX./ReX);         %note: analize atan (arctan) properties
+limit = 1e-10;
+filteredReX = normReX .* (abs(normReX) > limit);
+filteredImX = normImX .* (abs(normImX) > limit);
+for cont = 1:N/2+1
+    if(~filteredReX(cont))
+        if(normImX(cont) < 0)
+            argument = -inf;
+        else
+            argument = inf;
+        end
+    else
+        argument = filteredImX(cont)/filteredReX(cont);
+    end
+    PhaseX(cont)  = atan(argument);         %note: analize atan (arctan) properties
+end
 
 figure 
 subplot(1, 2, 1)
@@ -132,3 +149,15 @@ title('MagX');
 subplot(1, 2, 2)
 stem(k, PhaseX)
 title('PhaseX');
+
+%% Returning to time domain
+
+%normalize ReX[] and ImX are transposed and replicated in order to perforn
+%elemnt weise multiplications by the basis functions, theen aummation is
+%performed
+cosContrib = sum(repmat(normReX', 1, N).*matReXBasis);
+sinContrib = sum(repmat(normImX', 1, N).*matImXBasis);
+
+xSynth = cosContrib + sinContrib;
+figure
+plot(i, x, 'b', i, xSynth, 'm');
