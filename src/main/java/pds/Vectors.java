@@ -52,6 +52,43 @@ public class Vectors{
         return sum;
     }
 
+    /**
+     *
+     * @param vectors
+     * @return multiplication entry by entry of given vectors
+     */
+    public Vectors multEntries(Vectors vectors){
+        if(vectors.length != this.entries.length){
+            return null;
+        }
+        Double[] vector = vectors.toArray();
+        Double[] multip = new Double[this.entries.length];
+        for(int i=0; i<this.entries.length; i++){
+            multip[i] = vector[i]*this.entries[i];
+        }
+        return new Vectors(multip);
+    }
+
+    public Vectors multEntries(Double[] vector){
+        return multEntries(new Vectors(vector));
+    }
+
+    public Vectors sumEntries(Vectors vectors){
+        if(vectors.length != this.entries.length){
+            return null;
+        }
+        Double[] vector = vectors.toArray();
+        Double[] sum = new Double[this.entries.length];
+        for(int i=0; i<this.entries.length; i++){
+            sum[i] = vector[i]+this.entries[i];
+        }
+        return new Vectors(sum);
+    }
+
+    public Vectors sumEntries(Double[] vector){
+        return sumEntries( new Vectors(vector));
+    }
+
     public static Vectors linspace(Double start, Double end, int points){
         return new Vectors(Generator.linspace(start, end, points));
     }
@@ -71,8 +108,6 @@ public class Vectors{
     public static Vectors cos(Vectors vectors){
         return new Vectors(Operation.cos(vectors.toArray()));
     }
-
-
 
     public Double[] toArray(){
         return this.entries;

@@ -22,7 +22,7 @@ public class Application {
         Printer.array(Operation.sin(array));
         Printer.array(Operation.cos(array));
 
-        Vectors v = new Vectors(new Double[]{0.0, 1.0, 0.0});
+        Vectors v = new Vectors(new Double[]{0.0, 1.0, 5.0});
         Printer.array(v.scalarMult(1.0).toArray());
         Printer.array(v.scalarMult(3.0).toArray());
 
@@ -40,6 +40,10 @@ public class Application {
         Graphic graph = new Graphic(vector, sinVector);
         graph.setLeyend("Serie local");
         graph.plot();
+
+        Vectors v1 = new Vectors(new Double[]{1.0, 10.0, 1.0});
+        Printer.vector(v.multEntries(v1));
+        Printer.vector(v.sumEntries(v1));
 
     }
 }
