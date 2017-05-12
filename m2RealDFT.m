@@ -64,10 +64,10 @@ end
 
 %%Signal to transform
 %% Sine wave
-x = sin(2*pi*5*i/N + pi);
+x = sin(2*pi*5*i/N - pi);
 
 %% Cosine wave
-x = cos(2*pi*10*i/N);
+x = cos(2*pi*10*i/N - pi);
 
 %% unit impulse
 x = zeros(1, length(i)); x(1) = 1;
@@ -130,7 +130,7 @@ filteredReX = normReX .* (abs(normReX) > limit);
 filteredImX = normImX .* (abs(normImX) > limit);
 for cont = 1:N/2+1
     if(~filteredReX(cont))
-        if(normImX < 0)
+        if(normImX(cont) < 0)
             argument = -inf;
         else
             argument = inf;
