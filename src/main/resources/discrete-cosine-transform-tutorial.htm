@@ -1,0 +1,1592 @@
+
+<!-- saved from url=(0062)http://www.haberdar.org/discrete-cosine-transform-tutorial.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="Generator" content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+span.MsoPlaceholderText
+	{color:gray;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:.5in;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:.5in;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+span.apple-converted-space
+	{mso-style-name:apple-converted-space;}
+.MsoChpDefault
+	{font-family:"Calibri",sans-serif;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:107%;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:.5in .5in .5in .5in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<script async="" src="./discrete-cosine-transform-tutorial_files/analytics.js.descarga"></script><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-21378215-1', 'auto');
+  ga('send', 'pageview');
+
+</script> 
+</head>
+
+<body lang="EN-US" link="blue" vlink="#954F72">
+
+<div class="WordSection1">
+
+<p class="MsoNormal" style="line-height:normal"><a href="http://www.haberdar.org/#tutorials"><b><span style="font-size:14.0pt;
+color:#E82F38;text-decoration:none">R</span></b><b><span style="font-size:14.0pt;
+color:#34A853;text-decoration:none">e</span></b><b><span style="font-size:14.0pt;
+color:#4285F4;text-decoration:none">t</span></b><b><span style="font-size:14.0pt;
+color:#FBBC05;text-decoration:none">u</span></b><b><span style="font-size:14.0pt;
+color:#E82F38;text-decoration:none">r</span></b><b><span style="font-size:14.0pt;
+color:#34A853;text-decoration:none">n</span></b><span style="font-size:14.0pt;
+color:windowtext;text-decoration:none"> </span><b><span style="font-size:14.0pt;
+color:#4285F4;text-decoration:none">H</span></b><b><span style="font-size:14.0pt;
+color:#FBBC05;text-decoration:none">o</span></b><b><span style="font-size:14.0pt;
+color:#E82F38;text-decoration:none">m</span></b><b><span style="font-size:14.0pt;
+color:#34A853;text-decoration:none">e</span></b></a></p>
+
+<p class="MsoNormal" style="line-height:normal"><b><span style="font-size:32.0pt;
+color:#0070C0">Discrete Cosine Transform</span></b></p>
+
+<p class="MsoNormal" style="line-height:18.0pt"><span style="font-size:14.0pt">Discrete
+Cosine Transform (DCT) linearly transforms data (i.e., a set of numbers, e.g.,
+a<sub>0</sub>, a<sub>1</sub>, …, a<sub>n-1</sub>) into the frequency domain,
+where the data can be represented by a set of coefficients (w<sub>0</sub>, w<sub>1</sub>,
+…, w<sub>n-1</sub>) in the frequency domain. The advantage of DCT is that the <span style="color:#4472C4">energy of the original<b> </b>data</span> (e.g., a<sub>0</sub>,
+a<sub>1</sub>,…, a<sub>n-1</sub>) may be concentrated in only a few frequency coefficients
+of DCT depending on <span style="color:#4472C4">the correlation in the data</span>.
+This means that most of the DCT coefficients (w<sub>0</sub>, w<sub>1</sub>, …,
+w<sub>n-1</sub>) may be zero or very small values. DCT expresses a signal (i.e.,
+data, a set of numbers) in terms of a <span style="color:#4472C4">sum of </span></span><a href="http://en.wikipedia.org/wiki/Trigonometric_function"><span style="font-size:14.0pt">cosine</span></a><span style="font-size:14.0pt;
+color:#4472C4"> functions with different </span><a href="http://en.wikipedia.org/wiki/Frequencies"><span style="font-size:14.0pt">frequencies</span></a><span style="font-size:14.0pt">. &nbsp;I understand that some are not comfortable with the
+term <span style="color:#4472C4">signal</span>, if you do not like it, you can
+simply say “a set of numbers”, instead. A signal is nothing but a set of
+numbers, nothing scary.</span></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:.25in;text-align:center;
+line-height:18.0pt"><b><span style="font-size:16.0pt;color:#C00000">signal</span></b><span style="font-size:16.0pt;color:#C00000"> </span><span style="font-size:16.0pt">=
+<b><span style="color:#70AD47">data</span></b><span style="color:#70AD47"> </span>=
+<b><span style="color:#4472C4">a set of numbers</span></b></span></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">Let’s try to
+transform our first data, a set </span><b><span style="font-size:14.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:
+14.0pt;line-height:107%"> of </span><b><span style="font-size:14.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;">n</span></b><span style="font-size:
+14.0pt;line-height:107%"> values:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:
+16.0pt;line-height:107%"> = {a<sub>0</sub>, a<sub>1</sub>, …, a<sub>n-1</sub> }.</span></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">This is a
+one dimensional data and we will compute its <span style="color:#4472C4">one
+dimensional </span>discrete cosine transform coefficients using the formula
+below: </span></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:.25in;text-align:center"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="418" height="74" src="./discrete-cosine-transform-tutorial_files/image001.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt">We have </span><b><span style="font-size:14.0pt;
+font-family:&quot;Courier New&quot;">n</span></b><span style="font-size:14.0pt"> elements
+in </span><b><span style="font-size:14.0pt;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt">, so we will have </span><b><span style="font-size:
+14.0pt;font-family:&quot;Courier New&quot;">n</span></b><span style="font-size:14.0pt">
+DCT coefficients. We will later see that the discrete cosine transform <span style="color:#4472C4">coefficients </span>are actually <span style="color:#4472C4">the
+weights </span>that indicate how strong the frequency components are in the
+data. </span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt"><b><span style="font-size:16.0pt;line-height:107%;font-family:Wingdings;color:#C00000">L</span></b><b><span style="font-size:16.0pt;line-height:107%;color:#C00000">&nbsp; </span></b><b><span style="font-size:16.0pt;line-height:107%;color:#C00000">Orthogonality of
+Discrete Cosine Transform</span></b></p>
+
+<p class="MsoNormal" style="line-height:18.0pt"><span style="font-size:14.0pt;
+color:#C00000">We will now have some boring stuff here, but the good point is
+that you can simply ignore if you are not interested in the <b>orthogonality</b>.
+Orthogonal transforms are known to have the tendency of de-correlating the
+given signal.&nbsp; To make DCT values orthogonal, we multiply the terms by scale
+factors </span><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif;
+position:relative;top:4.5pt"><img width="42" height="26" src="./discrete-cosine-transform-tutorial_files/image002.png"></span><span style="font-size:14.0pt;color:#C00000">&nbsp;and </span><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif;
+position:relative;top:6.0pt"><img width="44" height="29" src="./discrete-cosine-transform-tutorial_files/image003.png"></span><span style="font-size:14.0pt;color:#C00000">&nbsp;. If two lines are orthogonal, they are
+perpendicular at their point of intersection. Similarly, two </span><a href="http://en.wikipedia.org/wiki/Vector_(mathematics_and_physics)"><span style="font-size:14.0pt;color:#C00000">vectors</span></a><span style="font-size:14.0pt;color:#C00000">, </span><b><span style="font-size:14.0pt;
+font-family:&quot;Courier New&quot;;color:#C00000">a</span></b><span style="font-size:
+14.0pt;color:#C00000"> and </span><b><span style="font-size:14.0pt;font-family:
+&quot;Courier New&quot;;color:#C00000">b</span></b><span style="font-size:14.0pt;
+color:#C00000">, are orthogonal if and only if their dot product is zero:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="185" height="27" src="./discrete-cosine-transform-tutorial_files/image004.png"></span></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%;color:#C00000">where
+</span><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif;
+position:relative;top:5.5pt"><img width="35" height="27" src="./discrete-cosine-transform-tutorial_files/image005.png"></span><span style="font-size:14.0pt;line-height:107%;color:#C00000">&nbsp;and </span><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif;
+position:relative;top:5.5pt"><img width="35" height="27" src="./discrete-cosine-transform-tutorial_files/image006.png"></span><span style="font-size:14.0pt;line-height:107%;color:#C00000">&nbsp;denote the lengths or
+magnitudes of </span><b><span style="font-size:14.0pt;line-height:107%;
+font-family:&quot;Courier New&quot;;color:#C00000">a</span></b><span style="font-size:
+14.0pt;line-height:107%;color:#C00000"> and </span><b><span style="font-size:
+14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">b</span></b><span style="font-size:14.0pt;line-height:107%;color:#C00000">. In addition, two
+vectors in an inner product space are orthonormal if they are orthogonal and
+both of unit length.</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;font-family:Wingdings;color:#4472C4">J</span></b></p>
+
+<p class="MsoNormal" style="line-height:normal"><span style="font-size:14.0pt">Come
+back to the happy zone. Let’s refine the definition of discrete cosine
+transform coefficients by adding the boring orthogonality stuff above.</span></p>
+
+<p class="MsoNormal" style="line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="475" height="79" src="./discrete-cosine-transform-tutorial_files/image007.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:24.0pt;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="142" height="102" src="./discrete-cosine-transform-tutorial_files/image008.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;color:#0070C0">Step1: Expansion of the
+DCT Definition for k=0, the DC Coefficient</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:14.0pt">Let us write the coefficient <b><span style="color:#4472C4">w<sub>0</sub></span></b>&nbsp; (k=0) in the expanded form,</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="280" height="69" src="./discrete-cosine-transform-tutorial_files/image009.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="279" height="69" src="./discrete-cosine-transform-tutorial_files/image010.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="288" height="69" src="./discrete-cosine-transform-tutorial_files/image011.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="262" height="69" src="./discrete-cosine-transform-tutorial_files/image012.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="720" height="136" src="./discrete-cosine-transform-tutorial_files/image013.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="562" height="68" src="./discrete-cosine-transform-tutorial_files/image014.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="289" height="68" src="./discrete-cosine-transform-tutorial_files/image015.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="261" height="49" src="./discrete-cosine-transform-tutorial_files/image016.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:14.0pt">w<b><sub><span style="color:#4472C4">0</span></sub></b>,
+which is the first DCT coefficient,&nbsp; is called <b><span style="color:#4472C4">DC</span></b><span style="color:#4472C4"> </span>(direct current, zero frequency)&nbsp; <b><span style="color:#4472C4">coefficient</span></b>. </span><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif;
+position:relative;top:10.0pt"><img width="99" height="36" src="./discrete-cosine-transform-tutorial_files/image017.png"></span><span style="font-size:14.0pt">&nbsp;gives us the <span style="color:#4472C4">mean </span>of
+the set </span><b><span style="font-size:14.0pt;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt">.</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;color:#0070C0">Step2: Expansion of the
+DCT Definition for k &gt; 0, AC Coefficients</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt">Let us expand the DCT formula for the rest of the
+coefficients, where k is greater than zero. These coefficients are called <b><span style="color:#4472C4">AC</span></b><span style="color:#4472C4"> </span>(alternative
+current) <b><span style="color:#4472C4">coefficients</span></b>.</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="280" height="69" src="./discrete-cosine-transform-tutorial_files/image018.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="274" height="69" src="./discrete-cosine-transform-tutorial_files/image019.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="262" height="69" src="./discrete-cosine-transform-tutorial_files/image020.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="720" height="136" src="./discrete-cosine-transform-tutorial_files/image021.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt">Let us have a break here and remember the advantage of
+using DCT transform. If the set </span><b><span style="font-size:14.0pt;
+font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt"> consists
+of <span style="color:#4472C4">correlated values (there is redundancy in the
+data)</span>, then most of the DCT coefficients will be either zero or very small
+numbers, and only a few are large. Can we estimate which coefficients will be
+zero or small? Actually, yes. The early AC coefficients (e.g., w<sub>1</sub>, w<sub>2</sub>,
+w<sub>3</sub> ) correspond to <span style="color:#4472C4">low-frequency co</span><span style="color:#4472C4">m</span><span style="color:#4472C4">ponents</span>, and&nbsp;
+the low-frequency coefficients contain most of the important information about
+the data. The later AC coefficients (e.g., w<sub>n-3</sub>, w<sub>n-2</sub>, w<sub>n-1</sub>)
+correspond to <span style="color:#4472C4">high-frequency components</span>. I
+know that the term <span style="color:#4472C4">“information about the data”</span>
+sounds very vague, but no worries, you will understand very well when we work
+on an example. For now, we can say that the <span style="color:#4472C4">low-frequency
+coefficients </span>(they are usually large numbers) are more important than <span style="color:#4472C4">high-frequency coefficients </span>(they are usually small
+numbers). If you are not familiar with the terms <span style="color:#4472C4">high-frequency</span>
+and <span style="color:#4472C4">low-frequency</span>, that is fine. <span style="color:#70AD47">Lo</span><span style="color:#70AD47">w</span><span style="color:#70AD47">-frequency </span>refers to the <span style="color:#70AD47">slow
+change</span>, and <span style="color:#C00000">high-frequency </span>refers to
+the <span style="color:#C00000">rapid change</span>.</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;color:#0070C0">Step3: Compute DCT
+Coefficients for a Given Set</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">Too much talk and no action. Let us work on an example, where
+we will use the following set</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:
+16.0pt;line-height:107%"> = {1, 2, 3, 4, 5, 6, 7, 8}.</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">The set has 8 elements, so </span><b><span style="font-size:
+14.0pt;line-height:107%;font-family:&quot;Courier New&quot;">n</span></b><span style="font-size:14.0pt;line-height:107%"> is 8. As you know, in computer
+science we love to use the powers of two. Moreover, numbers in the set are <span style="color:#0070C0">correlated, an obvious pattern, incremented by one</span>.
+It is time to compute DCT coefficients. There are 8 numbers in the set </span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt;line-height:107%">, so there will be 8 DCT coefficients
+in the frequency domain. If you use the DCT formula above and compute the
+coefficients for k =0, 1, 2, 3, 4, 5, 6, 7, you will see that the DCT
+coefficients are</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">w</span><b><sub><span style="font-size:16.0pt;line-height:
+107%;font-family:&quot;Courier New&quot;">A</span></sub></b><span style="font-size:14.0pt;
+line-height:107%"> =</span><span style="font-size:16.0pt;line-height:107%"> {<span style="color:#70AD47">12.7279</span>, <span style="color:#4472C4">-6.4423</span>,
+0, -0.6735, 0, -0.2009, 0, -0.0507}</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">Let us talk about the values of the coefficients we computed.
+The <span style="color:#70AD47">DC coefficient</span>, w<sub>0</sub>, is <span style="color:#70AD47">12.7279</span>. The <span style="color:#4472C4">low-frequency
+coefficient</span>, w<sub>1</sub>, is <span style="color:#4472C4">-6.4423</span>.
+As you see the <span style="color:#C00000">high-frequency coefficients </span>are
+small numbers. This is something we expected because we have correlated numbers
+in the set </span><b><span style="font-size:14.0pt;line-height:107%;font-family:
+&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt;line-height:107%">. If
+you compute DCT coefficients of a set elements where the numbers are not
+correlated, we cannot say anything about the values of the coefficients. All
+may be large numbers.</span></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">Anyway, let’s
+go back to our example. We know that if the value of a coefficient is small, it
+does not carry much information, so we can ignore the coefficients with absolute
+values smaller than one. We now have</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">w</span><b><sub><span style="font-size:16.0pt;line-height:
+107%;font-family:&quot;Courier New&quot;">A</span></sub></b><span style="font-size:14.0pt;
+line-height:107%"> =</span><span style="font-size:16.0pt;line-height:107%"> {<span style="color:#70AD47">12.7279</span>, <span style="color:#4472C4">-6.4423</span>,
+<span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>}</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;color:#0070C0">Step4: Reconstruct the
+Data Using the DCT Coefficients</span></b></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">DCT is a
+transform and accordingly there is something called inverse DCT. The <span style="color:#70AD47">inverse discrete cosine transform (IDCT) </span>reconstructs
+the data from its discrete cosine transform coefficients. IDCT is defined as</span></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:.25in;text-align:center"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="467" height="79" src="./discrete-cosine-transform-tutorial_files/image022.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt">In summary, we use <span style="color:#4472C4">DCT </span>in
+order to compute the DCT coefficients <span style="color:#70AD47">{w<sub>0</sub>,
+w<sub>1</sub>, …, w<sub>n-1</sub>}</span> of the set <span style="color:#4472C4">{a<sub>0</sub>,
+a<sub>1</sub>, …, a<sub>n-1</sub>}</span>. Then, we use <span style="color:
+#70AD47">IDCT </span>to reconstruct the set <span style="color:#4472C4">{a<sub>0</sub>,
+a<sub>1</sub>, …, a<sub>n-1</sub>}</span> from its DCT coefficients <span style="color:#70AD47">{w<sub>0</sub>, w<sub>1</sub>, …, w<sub>n-1</sub>}</span>.
+</span></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">If we apply <span style="color:#70AD47">IDCT</span> transform to {<span style="color:#70AD47">12.7279</span>,
+<span style="color:#4472C4">-6.4423</span>, <span style="color:#C00000">0</span>,
+<span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>, <span style="color:#C00000">0</span>}, we will obtain the data set <span style="color:#4472C4">{1.3407, 1.8217, 2.7104, 3.8716, 5.1284, 6.2896, 7.1783,
+7.6593}</span>. Let’s compare the actual data set and the data set we
+reconstructed from the first two DCT coefficients (<span style="color:#C00000">remember
+we ignored the rest of the coefficients</span>). </span></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">&nbsp;</span></p>
+
+<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border:none">
+ <tbody><tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">Original data set</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">1</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">2</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">3</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">4</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">5</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">6</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">7</span></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">8</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:14.0pt">Reconstructed date set</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">1.3407</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">1.8217</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">2.7104</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">3.8716</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">5.1284</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">6.2896</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">7.1783</span></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><span style="font-size:16.0pt">7.6593</span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt">If we compute <span style="color:#4472C4">the </span></span><a href="https://en.wikipedia.org/wiki/Mean_squared_error"><span style="font-size:
+14.0pt">mean squared error</span></a><span style="font-size:14.0pt"> between the
+original data set and the reconstructed date set, we will see that the error is
+very small, <span style="color:#4472C4">0.4965</span>. Why? The energy of the
+signal </span><b><span style="font-size:14.0pt;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt"> is concentrated only on first two coefficients
+because the elements in</span><b><span style="font-size:14.0pt;font-family:
+&quot;Courier New&quot;"> A</span></b><span style="font-size:14.0pt"> are correlated. If
+you like, we can calculate the energy of the signal </span><b><span style="font-size:14.0pt;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt"> and how much of its energy is concentrated on the
+first two coefficients. The formulation below gives the energy of </span><b><span style="font-size:14.0pt;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt">.&nbsp; </span></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:.25in;text-align:center"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="106" height="74" src="./discrete-cosine-transform-tutorial_files/image023.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">So, <b><span style="color:#4472C4">E</span></b></span><b><sub><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">A</span></sub></b><span style="font-size:14.0pt;line-height:107%"> = 1<sup>2</sup>+2<sup>2</sup>+3<sup>2</sup>+4<sup>2</sup>+5<sup>2</sup>+6<sup>2</sup>+7<sup>2</sup>+8<sup>2
+</sup>= <b><span style="color:#4472C4">204</span></b>. And let’s compute the
+energy stored in w</span><b><sub><span style="font-size:14.0pt;line-height:
+107%;font-family:&quot;Courier New&quot;">A</span></sub></b><span style="font-size:14.0pt;
+line-height:107%"> = {12.7279, -6.4423, 0, -0.6735, 0, -0.2009, 0, -0.0507}:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><b><span style="font-size:16.0pt;color:#70AD47">E</span></b><b><sub><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;;color:#70AD47">W</span></sub></b><span style="font-size:16.0pt"> = 12.7279<sup>2</sup>+(-6.4423)</span><sup><span style="font-size:14.0pt"> 2</span></sup><span style="font-size:14.0pt">+</span><span style="font-size:16.0pt">0</span><sup><span style="font-size:14.0pt">2</span></sup><span style="font-size:14.0pt">+(</span><span style="font-size:16.0pt">-0.6735)</span><sup><span style="font-size:14.0pt"> 2</span></sup><span style="font-size:14.0pt">+</span><span style="font-size:16.0pt">0</span><sup><span style="font-size:14.0pt">2</span></sup><span style="font-size:14.0pt">+(</span><span style="font-size:16.0pt">-0.2009)</span><sup><span style="font-size:14.0pt"> 2</span></sup><span style="font-size:14.0pt">+</span><span style="font-size:16.0pt">0+(-0.0507)<sup>2</sup> = <b><span style="color:#4472C4">204</span></b></span><span style="font-size:14.0pt">. </span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><b><span style="font-size:16.0pt;color:#4472C4">E</span></b><b><sub><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;;color:#4472C4">A</span></sub></b><span style="font-size:14.0pt">&nbsp; and </span><b><span style="font-size:16.0pt;
+color:#70AD47">E</span></b><b><sub><span style="font-size:16.0pt;font-family:
+&quot;Courier New&quot;;color:#70AD47">W</span></sub></b><span style="font-size:14.0pt">&nbsp;
+are the same! We are not surprised, right? This is because of <span style="color:#4472C4">the principle of conservation of energy</span>. And, the
+first two DCT coefficients carry 99.75% of the total energy:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:16.0pt">(12.72792<sup>2</sup> +6.4423<sup>2</sup>)/<b><span style="color:#4472C4">204</span></b>= 0.9975</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+18.0pt"><span style="font-size:14.0pt">Here is the </span><a href="http://www.mathworks.com/products/matlab/"><span style="font-size:14.0pt">Matlab</span></a><span style="font-size:14.0pt"> code for this experiment. If you like you can try </span><a href="http://octave-online.net/"><span style="font-size:14.0pt">Octave</span></a><span style="font-size:14.0pt"> Online:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">A_raw =
+1:8;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">w&nbsp;&nbsp;&nbsp;&nbsp; =
+dct(A);</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">w_cof = w;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">w_cof(abs(w_cof)&lt;1)
+= 0;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">A_rec =
+idct(w_cof);</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">mse&nbsp;&nbsp; =
+mean(sum((A_raw-A_rec).^2))</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;color:#0070C0">Step5: Understand that
+DCT is not magic, it depends on the correlation</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt">Let’s repeat the same experiment for <span style="color:#4472C4">a set of <b>uncorrelated</b> numbers</span>. The DCT
+transform will now result in <span style="color:#4472C4">coefficients with
+large values</span> because the energy will be scattered among the
+coefficients. Consider the set B given below:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;">B</span></b><span style="font-size:
+16.0pt;line-height:107%"> = {</span> <span style="font-size:16.0pt;line-height:
+107%">1, 5, -9, -8, 7, 1, 0, 9}</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">If we apply DCT to </span><b><span style="font-size:14.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;">B</span></b><span style="font-size:
+14.0pt;line-height:107%">, we will obtain the following DCT coefficients</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">w</span><b><sub><span style="font-size:16.0pt;line-height:
+107%;font-family:&quot;Courier New&quot;">B</span></sub></b><span style="font-size:14.0pt;
+line-height:107%"> =</span><span style="font-size:16.0pt;line-height:107%"> {2.1213,
+-6.0855, 7.5688, 5.2571, 4.2426, -11.8857, -3.9005, 1.0293}</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt">Therefore, if you plan to use DCT for data
+compression, you should first find a good way to represent your data where the
+elements are correlated. For example, let us naively sort the elements of </span><b><span style="font-size:14.0pt;font-family:&quot;Courier New&quot;">B</span></b><span style="font-size:14.0pt"> to improve the correlation in the set:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;">B_sorted</span></b><span style="font-size:16.0pt;line-height:107%"> = {-9, -8, 0, 1, 1, 5, 7, 9}</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">and then apply DCT to the sorted set and we have:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">w</span><b><sub><span style="font-size:16.0pt;line-height:
+107%;font-family:&quot;Courier New&quot;">B_sorted</span></sub></b><span style="font-size:14.0pt;line-height:107%"> =</span><span style="font-size:16.0pt;
+line-height:107%"> {2.1213,&nbsp; -16.4520,&nbsp; -2.0719,&nbsp; -3.5681, -0.7071,&nbsp; 1.8680, 2.3890,
+0.3323}</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">Let us compare the energy concentrated on <span style="color:#C00000">the first 3 elements </span>of <span style="color:#70AD47">w</span></span><b><sub><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#70AD47">B</span></sub></b><span style="font-size:14.0pt;line-height:107%"> and <span style="color:#4472C4">w</span></span><b><sub><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">B_sorted</span></sub></b><span style="font-size:14.0pt;line-height:107%"> try to observe the sorting effects
+the results.</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;color:#70AD47">E</span></b><b><sub><span style="font-size:
+16.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#70AD47">w_B</span></sub></b><span style="font-size:16.0pt;line-height:107%"> = 2.1213<sup>2</sup>+(-6.0855)<sup>
+2</sup>+7.5688<sup>2</sup></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;color:#70AD47">E</span></b><b><sub><span style="font-size:
+16.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#70AD47">w_B</span></sub></b><span style="font-size:16.0pt;line-height:107%"> = 98.82</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;color:#4472C4">E</span></b><b><sub><span style="font-size:
+16.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">w_B_sorted</span></sub></b><span style="font-size:16.0pt;line-height:107%;color:#4472C4"> </span><span style="font-size:16.0pt;line-height:107%">= 2.1213<sup>2</sup>+(-16.4520)<sup>
+2</sup>+(-2.0719)<sup>2</sup> </span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><b><span style="font-size:16.0pt;
+line-height:107%;color:#4472C4">E</span></b><b><sub><span style="font-size:
+16.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">w_B_sorted</span></sub></b><span style="font-size:16.0pt;line-height:107%;color:#4472C4"> </span><span style="font-size:16.0pt;line-height:107%">= 279.46</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">As you see, <b><span style="color:#4472C4">E</span></b></span><b><sub><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">w_B_sorted</span></sub></b><span style="font-size:14.0pt;line-height:107%"> is much greater than <b><span style="color:#70AD47">E</span></b></span><b><sub><span style="font-size:14.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;;color:#70AD47">w_B</span></sub></b><span style="font-size:14.0pt;line-height:107%"> because of the improved correlation
+amount the elements of the </span><b><span style="font-size:14.0pt;line-height:
+107%;font-family:&quot;Courier New&quot;">B_sorted</span></b><span style="font-size:14.0pt;
+line-height:107%">.</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+18.0pt"><span style="font-size:14.0pt">Here is the </span><a href="http://www.mathworks.com/products/matlab/"><span style="font-size:14.0pt">Matlab</span></a><span style="font-size:14.0pt"> code for this experiment. If you like you can try </span><a href="http://octave-online.net/"><span style="font-size:14.0pt">Octave</span></a><span style="font-size:14.0pt"> Online:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">B&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+[1 5 -9 -8 7 1 0 9];</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">W&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+dct(B);</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">B_sorted &nbsp;&nbsp;&nbsp;&nbsp;=
+sort(B);</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">W_B_sorted &nbsp;&nbsp;=
+dct(B_sorted);</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">E_W_B &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+sum((W(1:3).^2))</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">E_W_B_sorted
+= sum((W_B_sorted(1:3).^2))</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:16.0pt;
+line-height:107%">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;color:#0070C0">Step6: Understand the
+definition of DCT, the base vectors of the transform</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">One of the most interesting (and maybe weird) features of DCT
+is that the <span style="color:#4472C4">value of </span></span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%">, that is the <span style="color:
+#4472C4">number of the elements in the <b>input</b> data set </span></span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">A</span></b><span style="font-size:14.0pt;line-height:107%">, actually plays a critical role in
+the transform’s base vectors. What is a base vector, please wait for a moment.
+Before going there, let us remember the definition of DCT:</span></p>
+
+<p class="MsoNormal" align="center" style="margin-bottom:.25in;text-align:center"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="420" height="74" src="./discrete-cosine-transform-tutorial_files/image024.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">As you see, </span><b><span style="font-size:14.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%"> is in the heart of the DCT
+definition. Therefore, most applications employing the DCT <span style="color:#4472C4">specifically use <b>8</b> as the value of </span></span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%">. If there is more than 8 elements in
+the input data set </span><b><span style="font-size:14.0pt;line-height:107%;
+font-family:&quot;Courier New&quot;;color:#4472C4">A</span></b><span style="font-size:
+14.0pt;line-height:107%">, they basically divide </span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">A</span></b><span style="font-size:14.0pt;line-height:107%"> into groups of 8 elements and then apply
+DCT to each group individually. &nbsp;The table below shows the value of</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="102" height="51" src="./discrete-cosine-transform-tutorial_files/image025.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">in degrees for </span></p>
+
+<p class="MsoListParagraphCxSpFirst" style="margin-bottom:.25in;text-indent:-.25in"><span style="font-size:14.0pt;line-height:107%;font-family:Symbol">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><b><span style="font-size:14.0pt;line-height:107%;font-family:
+&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;
+line-height:107%;color:#C00000"> </span><span style="font-size:14.0pt;
+line-height:107%">= 8, </span></p>
+
+<p class="MsoListParagraphCxSpMiddle" style="margin-bottom:.25in;text-indent:
+-.25in"><span style="font-size:14.0pt;line-height:107%;font-family:Symbol">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><b><span style="font-size:14.0pt;line-height:107%;color:#70AD47">t
+</span></b><span style="font-size:14.0pt;line-height:107%">= 0, ..., </span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%">-1 , and </span></p>
+
+<p class="MsoListParagraphCxSpLast" style="margin-bottom:.25in;text-indent:-.25in"><span style="font-size:14.0pt;line-height:107%;font-family:Symbol">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><b><span style="font-size:14.0pt;line-height:107%;color:#4472C4">k</span></b><span style="font-size:14.0pt;line-height:107%"> = 0, ...,</span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#4472C4">
+</span></b><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;
+color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%">-1.</span></p>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.25in;margin-bottom:.0001pt;line-height:normal"><span style="font-size:14.0pt">&nbsp;</span></p>
+
+<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="margin-left:.25in;border-collapse:collapse;border:none">
+ <tbody><tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#C00000">n = 8</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=0</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=1</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=2</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=3</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=4</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=5</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=6</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="center" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:center;line-height:normal"><b><span style="font-size:14.0pt;
+  color:#70AD47">t=7</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=0</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">0.00</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=1</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">11.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">33.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">56.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">78.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">101.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">123.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">146.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">168.75</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=2</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">22.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">67.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">112.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">157.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">202.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">247.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">292.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">337.50</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=3</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">33.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">101.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">168.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">236.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">303.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">11.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">78.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">146.25</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=4</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">45.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">135.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">225.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">315.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">45.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">135.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">225.00</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">315.00</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=5</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">56.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">168.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">281.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">33.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">146.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">258.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">11.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">123.75</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=6</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">67.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">202.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">337.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">112.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">247.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">22.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">157.50</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">292.50</span></b></p>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-top:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=7</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">78.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">236.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">33.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">191.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">348.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">146.25</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">303.75</span></b></p>
+  </td>
+  <td valign="top" style="border-top:none;border-left:none;border-bottom:solid windowtext 1.0pt;
+  border-right:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">101.25</span></b></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:.25in;margin-bottom:.0001pt;line-height:normal"><span style="font-size:14.0pt">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in"><span style="font-size:14.0pt;
+line-height:107%">Before going to the details of the value of<span style="color:#4472C4"> </span></span><b><span style="font-size:14.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%">, let us try to understand what
+happens when the <span style="color:#4472C4">value of <b>k </b>changes</span>.
+Please look at the values at each row. For example, for <b><span style="color:#4472C4">k</span></b><span style="color:#4472C4">=0</span>, there
+is <span style="color:#4472C4">no change at all</span>, that is the <span style="color:#4472C4">DC component</span>. For <b><span style="color:#4472C4">k</span></b><span style="color:#4472C4">=1</span>, </span></p>
+
+<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="margin-left:.25in;border-collapse:collapse;border:none">
+ <tbody><tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=1</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">11.25</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">33.75</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">56.25</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">78.75</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">101.25</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">123.75</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">146.25</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">168.75</span></b></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%">there is a
+slow change, that corresponds to the <span style="color:#4472C4">low frequency</span>.
+For <b><span style="color:#4472C4">k</span></b><span style="color:#4472C4">=7</span>,
+</span></p>
+
+<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="margin-left:.25in;border-collapse:collapse;border:none">
+ <tbody><tr>
+  <td valign="top" style="border:solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal"><b><span style="font-size:14.0pt;color:#4472C4">k=7</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">78.75</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">236.25</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">33.75</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">191.25</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">348.75</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">146.25</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">303.75</span></b></p>
+  </td>
+  <td valign="top" style="border:solid windowtext 1.0pt;border-left:none;
+  padding:0in 5.4pt 0in 5.4pt">
+  <p class="MsoNormal" align="right" style="margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal"><b><span style="font-size:12.0pt;
+  font-family:&quot;Courier New&quot;">101.25</span></b></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%">there is a <span style="color:#4472C4">rapid change</span> (value jumps from 78.75 to 236.25,
+then goes to 33.75 ), that corresponds to the <span style="color:#4472C4">high
+frequency</span>. </span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%">We use the
+first row to calculate the DCT coefficient <span style="color:#70AD47">w<sub>0</sub>
+</span>and similarly use the second row to calculate the DCT coefficient <span style="color:#70AD47">w<sub>1</sub></span>, and so on so forth. When we
+calculate DCT coefficients, we have a set of </span><b><span style="font-size:
+14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%"> numbers <span style="color:#4472C4">as
+an input</span>, and we have </span><b><span style="font-size:14.0pt;
+line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></b><span style="font-size:14.0pt;line-height:107%"> coefficients <span style="color:
+#4472C4">as an output</span>. For each DCT coefficient, we have <b>a base
+frequency f</b> and accordingly <b>a base vector</b>. <u>And the value of </u></span><b><u><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></u></b><u><span style="font-size:14.0pt;line-height:107%"> changes the set of the <b>base
+vectors</b></span></u><span style="font-size:14.0pt;line-height:107%"> for the
+DCT transform. In order words, <u>we sample the cosine signal, and where we
+take the samples on the cosine signal depends the value of </u></span><b><u><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">n</span></u></b><span style="font-size:14.0pt;line-height:107%">. This may sound hard to understand, so
+let’s draw the cosine signals (i.e., values) given at each row in the table above.
+Hopefully, it will be clearer to see how the cosine signal changes <span style="color:#4472C4">with the increasing frequency</span>.</span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%"><img border="0" width="526" height="420" id="Picture 2" src="./discrete-cosine-transform-tutorial_files/image026.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%"><img border="0" width="526" height="420" id="Picture 3" src="./discrete-cosine-transform-tutorial_files/image027.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+18.0pt"><span style="font-size:14.0pt">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+18.0pt"><span style="font-size:14.0pt">Here is the </span><a href="http://www.mathworks.com/products/matlab/"><span style="font-size:14.0pt">Matlab</span></a><span style="font-size:14.0pt"> code for this experiment. If you like you can try </span><a href="http://octave-online.net/"><span style="font-size:14.0pt">Octave</span></a><span style="font-size:14.0pt"> Online:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">clear&nbsp;all;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">close&nbsp;all;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">clc;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">n=8;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">step = 0.1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">t=0:step:n-1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">f=0:n-1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">cosval =
+zeros(size(f,2),size(t,2));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">angle&nbsp;
+= zeros(size(f,2),size(t,2));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">for&nbsp;fr=1:size(f,2)</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;i=1:size(t,2)</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+frequency&nbsp;&nbsp; = fr-1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+angle(fr,i) = rad2deg(((2*t(i)+1)*frequency*pi)/(2*n));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+cosval(fr,i) = cos(deg2rad(angle(fr,i)));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;end</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">end</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">line='-'</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(1,:),['r'&nbsp;line]),hold&nbsp;on;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(2,:),['g'&nbsp;line])</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(3,:),['b'&nbsp;line])</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(4,:),['m'&nbsp;line])</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">hleg1 =
+legend('f_0','f_1',&nbsp;'f_2',&nbsp;'f_3')</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">grid&nbsp;on;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">figure,</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(5,:),['r'&nbsp;line]),hold&nbsp;on;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(6,:),['g'&nbsp;line])</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(7,:),['b'&nbsp;line])</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(8,:),['m'&nbsp;line])</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">hleg1 =
+legend('f_4','f_5','f_6','f_7');</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">grid&nbsp;on;</span></b></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%">Now, let us
+look at the DCT more deeply. Remember that we have a set </span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt;line-height:107%"> of <b><span style="color:#4472C4">8</span></b>
+values</span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><b><span style="font-size:16.0pt;line-height:107%;font-family:
+&quot;Courier New&quot;">A</span></b><span style="font-size:16.0pt;line-height:107%"> = {a<sub>0</sub>,
+a<sub>1</sub>, …, a<sub>7</sub> }</span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%">and accordingly
+the DCT should produce <b><span style="color:#4472C4">8</span></b> DCT
+coefficients:</span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:16.0pt;line-height:107%;color:#70AD47">w
+= {w<sub>0</sub>, w<sub>1</sub>, …, w<sub>7</sub>}</span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%">To be able to
+generate <b><span style="color:#4472C4">8</span></b> coefficients, we divide <b><span style="color:#4472C4">&#960;</span></b> by <b><span style="color:#4472C4">8</span></b>,
+and we use <b><span style="color:#4472C4">8</span></b> cosine <b>base vectors </b>with
+<span style="color:#4472C4">increasing frequencies</span>:</span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="25" src="./discrete-cosine-transform-tutorial_files/image028.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="25" src="./discrete-cosine-transform-tutorial_files/image029.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="25" src="./discrete-cosine-transform-tutorial_files/image030.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="25" src="./discrete-cosine-transform-tutorial_files/image031.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="25" src="./discrete-cosine-transform-tutorial_files/image032.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="26" src="./discrete-cosine-transform-tutorial_files/image033.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="25" src="./discrete-cosine-transform-tutorial_files/image034.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="355" height="25" src="./discrete-cosine-transform-tutorial_files/image035.png"></span></p>
+
+<p class="MsoNormal"><span style="font-size:14.0pt;line-height:107%">One by one, we
+multiply each <b>cosine base vector</b> by the <b>input vector </b></span><b><span style="font-size:14.0pt;line-height:107%;font-family:&quot;Courier New&quot;;color:#C00000">A</span></b><span style="font-size:14.0pt;line-height:107%"> to compute the DCT coefficients:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image036.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image037.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image038.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image039.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image040.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image041.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image042.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:11.0pt;line-height:107%;font-family:&quot;Calibri&quot;,sans-serif"><img width="124" height="68" src="./discrete-cosine-transform-tutorial_files/image043.png"></span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:14.0pt">So, we kind of <span style="color:#4472C4">take
+samples of the input signal at different points for each coefficient </span>and
+<span style="color:#4472C4">compute some kind of mean of the sample</span>.
+Accordingly, we can compute the coefficient <b>w<sub><span style="color:#4472C4">5</span></sub></b>
+by multiplying </span><b><span style="font-size:14.0pt;font-family:&quot;Courier New&quot;">A</span></b><span style="font-size:14.0pt"> = {1, 2, 3, 4, 5, 6, 7, 8} </span><span style="font-size:14.0pt">by <b>f<sup><span style="color:#4472C4">5</span></sup></b>.
+</span><span style="font-size:14.0pt">Here is the </span><a href="http://www.mathworks.com/products/matlab/"><span style="font-size:14.0pt">Matlab</span></a><span style="font-size:14.0pt"> code for this experiment. If you like you can try </span><a href="http://octave-online.net/"><span style="font-size:14.0pt">Octave</span></a><span style="font-size:14.0pt"> Online:</span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">clear&nbsp;all;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">close&nbsp;all;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">clc;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">A=1:0.1:8;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">n=8;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">step = 0.1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">t=0:step:n-1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">f=0:n-1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">cosval =
+zeros(size(f,2),size(t,2));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">angle&nbsp;
+= zeros(size(f,2),size(t,2));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">for&nbsp;fr=1:size(f,2)</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;i=1:size(t,2)</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+frequency&nbsp;&nbsp; = fr-1;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;angle(fr,i) =
+rad2deg(((2*t(i)+1)*frequency*pi)/(2*n));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+cosval(fr,i) = cos(deg2rad(angle(fr,i)));</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;&nbsp;&nbsp;&nbsp;end</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">end</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">line='-'</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">&nbsp;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(A,['m'&nbsp;line]),hold&nbsp;on;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(cosval(4,:),['r'&nbsp;line])</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">plot(A.*cosval(4,:))</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">hleg1 =
+legend('A',&nbsp;'f_5',&nbsp;'A*f_5')</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;font-family:&quot;Courier New&quot;">grid&nbsp;on;</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:14.0pt">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:normal"><span style="font-size:14.0pt"><img border="0" width="526" height="420" id="Picture 4" src="./discrete-cosine-transform-tutorial_files/image044.png"></span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-top:.25in;margin-right:0in;margin-bottom:.25in;
+margin-left:0in"><span style="font-size:14.0pt;line-height:107%;color:black">This
+is the end of the tutorial. I hope you enjoyed it. Please feel free to contact
+me at </span><b><span style="font-size:14.0pt;line-height:107%;color:#E82F38">haberdar<span class="apple-converted-space"> </span></span></b><b><span style="font-size:14.0pt;
+line-height:107%;color:#34A853">at</span></b><span class="apple-converted-space"><b><span style="font-size:14.0pt;line-height:107%;color:#FDC400"> </span></b></span><b><span style="font-size:14.0pt;line-height:107%;color:#4285F4">gmail</span></b><span class="apple-converted-space"><b><span style="font-size:14.0pt;line-height:107%;
+color:#70AD47"> </span></b></span><b><span style="font-size:14.0pt;line-height:
+107%;color:#FBBC05">dot</span></b><span class="apple-converted-space"><b><span style="font-size:14.0pt;line-height:107%;color:#FDC400"> </span></b></span><b><span style="font-size:14.0pt;line-height:107%;color:#E82F38">com</span></b><b><span style="font-size:14.0pt;line-height:107%;color:black">.</span></b><span style="font-size:14.0pt;line-height:107%;color:black"> </span></p>
+
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style="font-size:16.0pt;color:#0070C0">How to Cite this
+Document</span></b></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><span style="font-size:14.0pt;color:black">You can use anything here as long as you
+give credit as follows:</span><span style="color:black">&nbsp;</span></p>
+
+<p class="MsoNormal" style="margin-bottom:.25in;line-height:18.0pt"><b><span style="font-size:14.0pt;color:black">Hakan Haberdar, </span></b><b><span style="font-size:14.0pt;color:#FBBC05">"Generating Random Number from
+Image of a Probability Density Function"</span></b><b><span style="font-size:14.0pt;color:black">, Computer Science Tutorials [online], (</span></b><b><span style="font-size:14.0pt;color:#0070C0">Accessed MM-DD-YYYY</span></b><b><span style="font-size:14.0pt;color:black">) Available from: </span></b><b><span style="font-size:14.0pt;color:#E82F38">http://www.haberdar.org/discrete-cosine-transform-tutorial.htm</span></b></p>
+
+</div>
+
+
+
+
+</body></html>
