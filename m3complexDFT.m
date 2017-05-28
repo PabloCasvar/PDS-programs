@@ -52,11 +52,13 @@ absX = abs(X);
 figure
 subplot(1, 3, 1)
 plot(t, x);
+xlabel('time [s]');
 ylim(limy);
 subplot(1, 3, 2)
 plot(vectorf, absX);
 subplot(1, 3, 3)
 stem(vectorf(1:N/2), absX(1:N/2));
+xlabel('frequency [Hz]');
 ylim(limy);
 
 
